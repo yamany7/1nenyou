@@ -43,56 +43,93 @@ int main()
                     myled = led_num;
                 }
 
-            break;
+                break;
 
             case 2:
+            myled = 0;
+            wait(1);
 
                 while(1)
                 {
-                    pc.printf("\r\b\r\b\r");
-                    pc.printf(" LS | L3 | F | R3 | RS |  \r\n");
-                    pc.printf(" %4d | %4d | %4d | %4d |\r\n", machine.Lsen.get_val(), machine.Flsen.get_val(), machine.Frsen.get_val(), machine.Rsen.get_val());
+                    if(machine.isOpenedWallF()){
+                        myled=0b0110;
+                    }
+                    else if(machine.isOpenedWallL()){
+                        myled=0b1100;
+                    }
+                    else if (machine.isOpenedWallR()){
+                        myled=0b0011;
+                    }else{
+                        myled=0b1111;
+                    }
                 }
-            break;
+                break;
 
             case 3:
                 machine.start();
-                wait(2);
-
-                machine.daikei(10, 'F');
+                wait(1);
+                machine.daikei(10, 'A');
                 machine.detailedBlock();
-
                 while(true)
                 {
-                    if(machine.isOpenedWall('F'))
+
+                    if(machine.isOpenedWallF())
                     {
+                        myled=0b0110;
                         machine.halfBlock();
                         machine.halfBlock();
                     }
-                    else if(machine.isOpenedWall('L'))
+                    else if(machine.isOpenedWallL())
                     {
+                        myled=0b1100;
                         machine.daikei(10, 'D');
                         machine.turn90('L');
                         machine.daikei(10, 'A');
                     }
-                    else if(machine.isOpenedWall('R'))
+                    else if(machine.isOpenedWallR())
                     {
+                        myled=0b0011;
                         machine.daikei(10, 'D');
                         machine.turn90('R');
                         machine.daikei(10, 'A');
                     }
-                    else if(machine.isOpenedWall('F') && machine.isOpenedWall('L') && machine.isOpenedWall('R'))
-                    {
+                    else {
+                        myled=0b1001;
                         machine.daikei(10, 'D');
-                        machine.turn90('L');
-                        machine.turn90('L');
+                        machine.turn90('T');
                         machine.daikei(10, 'A');
                     }
-                    else { mode = 1; break; }
 
                 }
 
-            break;
+                if(Sw4.update()){
+                  myled = 1;
+                  wait(0.5);
+                  mode = 1;
+                  break;
+                }
+
+                break;
+
+            case 4:
+                while(1)
+                {
+                    pc.printf("\r\b\r\b\r");
+                  //  pc.printf(" LS | L3 | F | R3 | RS |  \r\n");
+                    pc.printf(" LS=%4d | FS=%4d | RS=%4d |\r\n", machine.Lsen.get_val(), machine.Fsen.get_val(), machine.Rsen.get_val());
+                    wait(1);
+
+                    if(Sw4.update()){
+                      myled = 1;
+                      wait(0.5);
+                      mode = 1;
+                      break;
+                    }
+                }
+            case 5:
+                machine.start();
+                machine.halfBlock();
+
 
             }
     }

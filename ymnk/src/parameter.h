@@ -1,9 +1,9 @@
 #define HALF_SEC 220
 #define TURN90 174
-#define KATA_KABE 100
-#define RYOU_KABE 100
+#define KATA_KABE 135
+#define RYOU_KABE 270
 #define KP 1.0
 #define SPEED 500
-#define DISTANCE_FRONT_WALL 100
-#define DISTANCE_SIDE_WALL 60
-#define START_PALSE 100
+#define DISTANCE_FRONT_WALL 150
+#define DISTANCE_SIDE_WALL 150
+#define START_PALSE 110

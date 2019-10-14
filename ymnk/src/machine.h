@@ -7,15 +7,15 @@ class Machine
 {
 public:
     StepMotor *Lmotor, *Rmotor;
-    DistanceSensor Flsen, Frsen, Lsen, Rsen;
+    DistanceSensor Fsen, Lsen, Rsen;
 
     //sensor pin shitei
-    Machine():Flsen(p15), Frsen(p19), Lsen(p16), Rsen(p18)
+    Machine():Fsen(p16), Lsen(p15), Rsen(p17)
     {
         //motor no pin shitei
         //(clock, reset, cw, b_cw,  m1,  m2, m3)
-        Lmotor = new StepMotor(p10, p12, p11, false, p13, p21, p9);
-        Rmotor = new StepMotor(p24, p26, p25, true, p14, p22, p23);
+        Lmotor = new StepMotor(p24, p26, p25, true, p14, p22, p23);
+        Rmotor = new StepMotor(p10, p12, p11, false, p13, p21, p9);
 
         Lmotor -> kill();
         Rmotor -> kill();
@@ -28,6 +28,7 @@ public:
         Lmotor->Start();
         Rmotor->Start();
     }
+
     inline void kill(){
         Lmotor->kill();
         Rmotor->kill();
@@ -42,12 +43,8 @@ public:
 
         while(true)
         {
-            if(Lmotor->pulse_cnt()>=HALF_SEC)
-            {
-                Lmotor->update(0);
-                Rmotor->update(0);
-                break;
-            }
+            pCtrl();
+            if(Lmotor->pulse_cnt()>HALF_SEC) break;
         }
     }
 
@@ -58,14 +55,13 @@ public:
 
         if(direction == 'L')
         {
-            Lmotor->update(-SPEED);
-            Rmotor->update(SPEED);
+            Lmotor->update(-SPEED/2);
+            Rmotor->update(SPEED/2);
             while(true)
             {
                 if(Rmotor->pulse_cnt() >= TURN90)
                 {
-                    Lmotor->update(0);
-                    Rmotor->update(0);
+
                     break;
                 }
             }
@@ -73,8 +69,8 @@ public:
         }
         else if(direction == 'R')
         {
-            Lmotor->update(SPEED);
-            Rmotor->update(-SPEED);
+            Lmotor->update(SPEED/2);
+            Rmotor->update(-SPEED/2);
             while(true)
             {
                 if(Lmotor->pulse_cnt() >= TURN90) break;
@@ -82,8 +78,8 @@ public:
         }
         else if(direction == 'T')
         {
-            Lmotor->update(SPEED);
-            Rmotor->update(-SPEED);
+            Lmotor->update(SPEED/2);
+            Rmotor->update(-SPEED/2);
             while(true)
             {
                 if(Lmotor->pulse_cnt() >= TURN90*2) break;
@@ -110,14 +106,18 @@ public:
 
             while(speed < SPEED)
             {
-                Lmotor->update(SPEED);
-                Rmotor->update(SPEED);
+                while(true){
+                    Lmotor->update(speed);
+                    Rmotor->update(speed);
 
-                if(Lmotor->pulse_cnt() > half_val){
-                    speed += a;
-                    Lmotor->reset_cnt();
-                    Rmotor->reset_cnt();
+                    if(Lmotor->pulse_cnt() > half_val){
+                        speed += a;
+                        Lmotor->reset_cnt();
+                        Rmotor->reset_cnt();
+                        break;
+                    }
                 }
+
             }
 
         }
@@ -125,16 +125,19 @@ public:
         {
             speed = SPEED;
 
-            while(speed < 30)
-            {
-                Lmotor->update(speed);
-                Rmotor->update(speed);
-
-                if(Lmotor->pulse_cnt() > half_val)
+            while(speed > 30){
+                while(true)
                 {
-                    speed -= a;
-                    Lmotor->reset_cnt();
-                    Rmotor->reset_cnt();
+                    Lmotor->update(speed);
+                    Rmotor->update(speed);
+
+                    if(Lmotor->pulse_cnt() > half_val)
+                    {
+                        speed -= a;
+                        Lmotor->reset_cnt();
+                        Rmotor->reset_cnt();
+                        break;
+                    }
                 }
             }
         }
@@ -142,7 +145,7 @@ public:
 
     void pCtrl()
     {
-        int cf = Flsen.get_val();
+        int cf = Fsen.get_val();
         int ls = Lsen.get_val();
         int rs = Rsen.get_val();
 
@@ -164,30 +167,23 @@ public:
             }
         }
 
-        if(cf < 500) ls = rs = 0;
-
         const int sensorDiff = ls - rs;
-        Lmotor->update(SPEED - (sensorDiff * KP));
-        Rmotor->update(SPEED + (sensorDiff * KP));
+        Lmotor->update(500 - (sensorDiff * KP));
+        Rmotor->update(500 + (sensorDiff * KP));
+        wait(0.005);
     }
 
-    bool isOpenedWall(char direction)
+    bool isOpenedWallF()
     {
-        if(direction=='F')
-        {
-            if(Flsen.get_val()>DISTANCE_FRONT_WALL && Frsen.get_val()>DISTANCE_FRONT_WALL) return true;
-            else return false;
-        }
-        else if(direction=='L')
-        {
-            if(Lsen.get_val()>DISTANCE_SIDE_WALL) return true;
-            else return false;
-        }
-        else if(direction=='R')
-        {
-            if(Rsen.get_val()>DISTANCE_SIDE_WALL) return true;
-            else return false;
-        }
+        return (Fsen.get_val()>DISTANCE_FRONT_WALL);
+    }
+    bool isOpenedWallL()
+    {
+        return (Lsen.get_val()>DISTANCE_SIDE_WALL);
+    }
+    bool isOpenedWallR()
+    {
+        return (Rsen.get_val()>DISTANCE_SIDE_WALL);
     }
 
     void detailedBlock()
@@ -201,5 +197,6 @@ public:
         {
             if(Lmotor->pulse_cnt()>=START_PALSE) break;
         }
+
     }
 };
