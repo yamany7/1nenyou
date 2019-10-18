@@ -3,15 +3,11 @@
 AnalogOut Ref(p18);
 BusOut myled(LED4, LED3, LED2, LED1);
 Serial pc(USBTX, USBRX);
-Switch sw1(p5, PullUp); //orange_l
-Switch sw2(p6, PullUp); //orange_r
-Switch sw3(p7, PullUp); //blue
-Switch sw4(p8, PullUp); //red
 
 
 int main()
 {
-    Test machine;
+    Test machine;//zibun no name ni kaki kaeru
     int mode = 1, led_num = 1;
     Ref = 0.15/3.3;
 
@@ -21,17 +17,17 @@ int main()
         while(true)
         {
 
-            if(sw1.update())
+            if(machine.Sw1->update())
             {
                 mode = led_num;
                 break;
             }
-            else if(sw2.update())
+            else if(machine.Sw2->update())
             {
                 led_num++;
                 if(led_num > 15) led_num = 1;
             }
-            else if(sw3.update())
+            else if(machine.Sw3->update())
             {
                 led_num--;
                 if(led_num < 1) led_num = 15;
@@ -104,8 +100,6 @@ int main()
                 machine.turn('T');
             break;
 
-            default:
-            break;
 
         }
 

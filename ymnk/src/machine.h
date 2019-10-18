@@ -20,18 +20,18 @@ public:
         Rmotor -> update(0);
     }
 
-    inline void start(); //reizi suru
-    inline void kill(); //reizi kiru
+    void virtual start(); //reizi suru
+    void virtual kill(); //reizi kiru
 
-    void halfBlock(); //hanmasu susumu
-    void detailedBlock(); //shitei no palse susumu
-    void turn(char direction); //magaru,mawaru
-    void daikei(int interval, char direction); //daikei de susumu
-    void pCtrl(); //p seigyo
+    void virtual halfBlock(); //hanmasu susumu
+    void virtual detailedBlock(); //shitei no palse susumu
+    void virtual turn(char direction); //magaru,mawaru
+    void virtual daikei(int interval, char direction); //daikei de susumu
+    void virtual pCtrl(); //p seigyo
 
-    bool isOpenedWallF(); //mae kabe check
-    bool isOpenedWallL(); //hidari kabe check
-    bool isOpenedWallR(); // migi kabe check
+    bool virtual isOpenedWallF(); //mae kabe check
+    bool virtual isOpenedWallL(); //hidari kabe check
+    bool virtual isOpenedWallR(); // migi kabe check
 
 };
 
