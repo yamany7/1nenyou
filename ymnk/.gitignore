@@ -3,3 +3,4 @@
 .gcc-flags.json
 /mouse.h
 /main.cpp
+/parameter.h
