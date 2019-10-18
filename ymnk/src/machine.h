@@ -59,12 +59,10 @@ public:
             Rmotor->update(SPEED/2);
             while(true)
             {
-                if(Rmotor->pulse_cnt() >= TURN90)
-                {
-
-                    break;
-                }
+                if(Rmotor->pulse_cnt() >= TURN90) break;
             }
+            Lmotor->update(0);
+            Rmotor->update(0);
 
         }
         else if(direction == 'R')
@@ -75,6 +73,8 @@ public:
             {
                 if(Lmotor->pulse_cnt() >= TURN90) break;
             }
+            Lmotor->update(0);
+            Rmotor->update(0);
         }
         else if(direction == 'T')
         {
@@ -84,6 +84,8 @@ public:
             {
                 if(Lmotor->pulse_cnt() >= TURN90*2) break;
             }
+            Lmotor->update(0);
+            Rmotor->update(0);
 
         }
         else{}
@@ -195,7 +197,7 @@ public:
 
         while(true)
         {
-            if(Lmotor->pulse_cnt()>=START_PALSE) break;
+            if(Lmotor->pulse_cnt()>=START_PULSE) break;
         }
 
     }

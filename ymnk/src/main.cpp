@@ -131,7 +131,7 @@ int main()
                 machine.halfBlock();
 
 
-            }
+        }
     }
 
 }
