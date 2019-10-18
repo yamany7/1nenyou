@@ -1,17 +1,17 @@
-#include <mbed.h>
-#include <machine.h>
+#include <mouse.h>
 
 AnalogOut Ref(p18);
 BusOut myled(LED4, LED3, LED2, LED1);
 Serial pc(USBTX, USBRX);
-Switch Sw1(p5, PullUp); //ika switch no pin
-Switch Sw2(p6, PullUp);
-Switch Sw3(p7, PullUp);
-Switch Sw4(p8, PullUp);
+Switch sw1(p5, PullUp); //orange_l
+Switch sw2(p6, PullUp); //orange_r
+Switch sw3(p7, PullUp); //blue
+Switch sw4(p8, PullUp); //red
+
 
 int main()
 {
-    Machine machine;
+    Test machine;
     int mode = 1, led_num = 1;
     Ref = 0.15/3.3;
 
@@ -20,17 +20,18 @@ int main()
 
         while(true)
         {
-            if(Sw1.update())
+
+            if(sw1.update())
             {
                 mode = led_num;
                 break;
             }
-            else if(Sw2.update())
+            else if(sw2.update())
             {
                 led_num++;
                 if(led_num > 15) led_num = 1;
             }
-            else if(Sw3.update())
+            else if(sw3.update())
             {
                 led_num--;
                 if(led_num < 1) led_num = 15;
@@ -84,7 +85,7 @@ int main()
                 while(true)
                 {
                     pc.printf("\r\b\r\b\r");
-                    pc.printf(" LS=%4d | FS=%4d | RS=%4d |\r\n", machine.Lsen.get_val(), machine.Fsen.get_val(), machine.Rsen.get_val());
+                    //pc.printf(" LS=%4d | FS=%4d | RS=%4d |\r\n", machine.Lsen.get_val(), machine.Fsen.get_val(), machine.Rsen.get_val());
                 }
 
             break;
@@ -102,12 +103,13 @@ int main()
                 wait(1);
                 machine.turn('T');
             break;
-            
+
             default:
             break;
 
         }
 
     }
+
 
 }
