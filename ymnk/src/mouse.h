@@ -3,20 +3,20 @@
 
 #include "machine.h"
 
-class Test : public Machine
+class Test : virtual public Machine
 {
 public:
-    Switch *Sw1;
-    Switch *Sw2;
-    Switch *Sw3;
-    Switch *Sw4;
+    // Switch *Sw1;
+    // Switch *Sw2;
+    // Switch *Sw3;
+    // Switch *Sw4;
 
     Test()
     {
-        Sw1 = new Switch(p5, PullUp);
-        Sw2 = new Switch(p6, PullUp);
-        Sw3 = new Switch(p7, PullUp);
-        Sw4 = new Switch(p8, PullUp);
+        // Sw1 = new Switch(p5, PullUp);
+        // Sw2 = new Switch(p6, PullUp);
+        // Sw3 = new Switch(p7, PullUp);
+        // Sw4 = new Switch(p8, PullUp);
         Fsen = new DistanceSensor(p16);
         Lsen = new DistanceSensor(p15);
         Rsen = new DistanceSensor(p17);

@@ -8,8 +8,10 @@ Serial pc(USBTX, USBRX);
 int main()
 {
     Test machine;//zibun no name ni kaki kaeru
+    myled=0b0011;
     int mode = 1, led_num = 1;
     Ref = 0.15/3.3;
+
 
     while(true)
     {
@@ -17,7 +19,7 @@ int main()
         while(true)
         {
 
-            if(machine.Sw1->update())
+        /*    if(machine.Sw1->update())
             {
                 mode = led_num;
                 break;
@@ -33,7 +35,7 @@ int main()
                 if(led_num < 1) led_num = 15;
             }
             else{}
-            myled = led_num;
+            myled = led_num;*/
         }
 
         switch(mode)

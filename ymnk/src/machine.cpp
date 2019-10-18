@@ -1,12 +1,12 @@
 #include "machine.h"
 
-inline void Machine::start() //reizi suru
+void Machine::start() //reizi suru
 {
     Lmotor->Start();
     Rmotor->Start();
 }
 
-inline void Machine::kill() //reizi kiru
+void Machine::kill() //reizi kiru
 {
     Lmotor->kill();
     Rmotor->kill();
