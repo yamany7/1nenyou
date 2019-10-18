@@ -15,57 +15,33 @@ int main()
     int mode = 1, led_num = 1;
     Ref = 0.15/3.3;
 
-    while(1)
+    while(true)
     {
-        switch (mode)
+
+        while(true)
         {
-            case 1://mode
-
-                while(true)
-                {
-
-                    if(Sw1.update())
-                    {
-                        mode = led_num;
-                        break;
-                    }
-                    else if(Sw2.update())
-                    {
-                        led_num++;
-                        if(led_num > 15) led_num = 1;
-                    }
-                    else if(Sw3.update())
-                    {
-                        led_num--;
-                        if(led_num < 1) led_num = 15;
-                    }
-                    else{}
-                    myled = led_num;
-                }
-
+            if(Sw1.update())
+            {
+                mode = led_num;
                 break;
+            }
+            else if(Sw2.update())
+            {
+                led_num++;
+                if(led_num > 15) led_num = 1;
+            }
+            else if(Sw3.update())
+            {
+                led_num--;
+                if(led_num < 1) led_num = 15;
+            }
+            else{}
+            myled = led_num;
+        }
 
-            case 2:
-            myled = 0;
-            wait(1);
-
-                while(1)
-                {
-                    if(machine.isOpenedWallF()){
-                        myled=0b0110;
-                    }
-                    else if(machine.isOpenedWallL()){
-                        myled=0b1100;
-                    }
-                    else if (machine.isOpenedWallR()){
-                        myled=0b0011;
-                    }else{
-                        myled=0b1111;
-                    }
-                }
-                break;
-
-            case 3:
+        switch(mode)
+        {
+            case 1: //hidarite tansaku
                 machine.start();
                 wait(1);
                 machine.daikei(10, 'A');
@@ -83,55 +59,54 @@ int main()
                     {
                         myled=0b1100;
                         machine.daikei(10, 'D');
-                        machine.turn90('L');
+                        machine.turn('L');
                         machine.daikei(10, 'A');
                     }
                     else if(machine.isOpenedWallR())
                     {
                         myled=0b0011;
                         machine.daikei(10, 'D');
-                        machine.turn90('R');
+                        machine.turn('R');
                         machine.daikei(10, 'A');
                     }
                     else {
                         myled=0b1001;
                         machine.daikei(10, 'D');
-                        machine.turn90('T');
+                        machine.turn('T');
                         machine.daikei(10, 'A');
                     }
 
                 }
 
-                if(Sw4.update()){
-                  myled = 1;
-                  wait(0.5);
-                  mode = 1;
-                  break;
-                }
+            break;
 
-                break;
-
-            case 4:
-                while(1)
+            case 2: //sensor test
+                while(true)
                 {
                     pc.printf("\r\b\r\b\r");
-                  //  pc.printf(" LS | L3 | F | R3 | RS |  \r\n");
                     pc.printf(" LS=%4d | FS=%4d | RS=%4d |\r\n", machine.Lsen.get_val(), machine.Fsen.get_val(), machine.Rsen.get_val());
-                    wait(1);
-
-                    if(Sw4.update()){
-                      myled = 1;
-                      wait(0.5);
-                      mode = 1;
-                      break;
-                    }
                 }
-            case 5:
+
+            break;
+
+            case 3: //1masu
                 machine.start();
                 machine.halfBlock();
+            break;
 
+            case 4: //turn test
+                machine.start();
+                machine.turn('L');
+                wait(1);
+                machine.turn('R');
+                wait(1);
+                machine.turn('T');
 
+<<<<<<< HEAD
         }
+=======
+            break;
+>>>>>>> 08c25f07484b2abeac6d44ddcfa1884a0f6a6abd
     }
 
 }

@@ -23,18 +23,19 @@ public:
         Rmotor -> update(0);
     }
 
-    inline void start()
+    inline void start() //reizi suru
     {
         Lmotor->Start();
         Rmotor->Start();
     }
 
-    inline void kill(){
+    inline void kill() //reizi kiru
+    {
         Lmotor->kill();
         Rmotor->kill();
     }
 
-    void halfBlock()
+    void halfBlock() //hanmasu susumu
     {
         Lmotor->reset_cnt();
         Rmotor->reset_cnt();
@@ -44,31 +45,37 @@ public:
         while(true)
         {
             pCtrl();
-            if(Lmotor->pulse_cnt()>HALF_SEC) break;
+            if((Lmotor->pulse_cnt()>HALF_SEC)||(Lmotor->pulse_cnt()>HALF_SEC)) break;
         }
     }
 
-    void turn90(char direction)
+    void turn(char direction) //magaru,mawaru
     {
         Lmotor->reset_cnt();
         Rmotor->reset_cnt();
 
-        if(direction == 'L')
+        if(direction == 'L') //hidari ni magaru
         {
             Lmotor->update(-SPEED/2);
             Rmotor->update(SPEED/2);
+
             while(true)
             {
+<<<<<<< HEAD
                 if(Rmotor->pulse_cnt() >= TURN90) break;
+=======
+            	if(Rmotor->pulse_cnt() >= TURN90) break;
+>>>>>>> 08c25f07484b2abeac6d44ddcfa1884a0f6a6abd
             }
             Lmotor->update(0);
             Rmotor->update(0);
 
         }
-        else if(direction == 'R')
+        else if(direction == 'R') //migi ni magaru
         {
             Lmotor->update(SPEED/2);
             Rmotor->update(-SPEED/2);
+
             while(true)
             {
                 if(Lmotor->pulse_cnt() >= TURN90) break;
@@ -76,10 +83,11 @@ public:
             Lmotor->update(0);
             Rmotor->update(0);
         }
-        else if(direction == 'T')
+        else if(direction == 'T') //180do magaru
         {
             Lmotor->update(SPEED/2);
             Rmotor->update(-SPEED/2);
+
             while(true)
             {
                 if(Lmotor->pulse_cnt() >= TURN90*2) break;
@@ -91,7 +99,7 @@ public:
         else{}
     }
 
-    void daikei(int interval, char direction)
+    void daikei(int interval, char direction) //daikei de susumu
     {
         Lmotor->reset_cnt();
         Rmotor->reset_cnt();
@@ -100,9 +108,8 @@ public:
         int a = (SPEED - 30)/interval;
         int x = HALF_SEC/interval;
         int half_val = HALF_SEC/interval;
-        int i = 0;
 
-        if(direction == 'A')
+        if(direction == 'A') //kasoku
         {
             speed = 30;
 
@@ -123,11 +130,12 @@ public:
             }
 
         }
-        else if(direction == 'D')
+        else if(direction == 'D') //gensoku
         {
             speed = SPEED;
 
-            while(speed > 30){
+            while(speed > 30)
+            {
                 while(true)
                 {
                     Lmotor->update(speed);
@@ -145,7 +153,7 @@ public:
         }
     }
 
-    void pCtrl()
+    void pCtrl() //p seigyo
     {
         int cf = Fsen.get_val();
         int ls = Lsen.get_val();
@@ -175,20 +183,20 @@ public:
         wait(0.005);
     }
 
-    bool isOpenedWallF()
+    bool isOpenedWallF() //mae kabe check
     {
         return (Fsen.get_val()>DISTANCE_FRONT_WALL);
     }
-    bool isOpenedWallL()
+    bool isOpenedWallL() //hidari kabe check
     {
         return (Lsen.get_val()>DISTANCE_SIDE_WALL);
     }
-    bool isOpenedWallR()
+    bool isOpenedWallR() // migi kabe check
     {
         return (Rsen.get_val()>DISTANCE_SIDE_WALL);
     }
 
-    void detailedBlock()
+    void detailedBlock() //shitei no palse susumu
     {
         Lmotor->reset_cnt();
         Rmotor->reset_cnt();
