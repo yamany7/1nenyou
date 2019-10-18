@@ -101,12 +101,13 @@ int main()
                 machine.turn('R');
                 wait(1);
                 machine.turn('T');
-
-<<<<<<< HEAD
-        }
-=======
             break;
->>>>>>> 08c25f07484b2abeac6d44ddcfa1884a0f6a6abd
+            
+            default:
+            break;
+
+        }
+
     }
 
 }

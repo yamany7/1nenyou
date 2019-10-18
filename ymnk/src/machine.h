@@ -61,11 +61,7 @@ public:
 
             while(true)
             {
-<<<<<<< HEAD
-                if(Rmotor->pulse_cnt() >= TURN90) break;
-=======
             	if(Rmotor->pulse_cnt() >= TURN90) break;
->>>>>>> 08c25f07484b2abeac6d44ddcfa1884a0f6a6abd
             }
             Lmotor->update(0);
             Rmotor->update(0);
