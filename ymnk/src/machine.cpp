@@ -16,13 +16,11 @@ void Machine::halfBlock() //hanmasu susumu
 {
     Lmotor->reset_cnt();
     Rmotor->reset_cnt();
-    Lmotor->update(SPEED);
-    Rmotor->update(SPEED);
 
     while(true)
     {
         pCtrl();
-        if((Lmotor->pulse_cnt()>HALF_SEC)||(Lmotor->pulse_cnt()>HALF_SEC)) break;
+        if((Lmotor->pulse_cnt()>HALF_SEC)||(Rmotor->pulse_cnt()>HALF_SEC)) break;
     }
 }
 
@@ -39,51 +37,218 @@ void Machine::detailedBlock() //shitei no palse susumu
     }
 
 }
+void Machine::detailedBlock(int speed) //shitei no palse susumu
+{
+    Lmotor->reset_cnt();
+    Rmotor->reset_cnt();
+    Lmotor->update(speed);
+    Rmotor->update(speed);
+
+    while(true)
+    {
+        if(Lmotor->pulse_cnt()>=START_PULSE) break;
+    }
+
+}
 
 void Machine::turn(char direction) //magaru,mawaru
 {
+    int speed;
+    int a;
+    int x;
+    int half_val;
     Lmotor->reset_cnt();
     Rmotor->reset_cnt();
 
     if(direction == 'L') //hidari ni magaru
     {
-        Lmotor->update(-SPEED/2);
-        Rmotor->update(SPEED/2);
+        speed = 0;
+        a = (SPEED - 30)/20;
+        x = TURN90/20;
+        half_val = TURN90/20;
 
-        while(true)
+        speed = 30;
+
+        while(speed < SPEED/2-a)
         {
-        	if(Rmotor->pulse_cnt() >= TURN90) break;
+            while(true){
+                Lmotor->update(-speed);
+                Rmotor->update(speed);
+
+                if(Rmotor->pulse_cnt() > half_val){
+                    speed += a;
+                    Lmotor->reset_cnt();
+                    Rmotor->reset_cnt();
+                    break;
+                }
+            }
+
         }
-        Lmotor->update(0);
-        Rmotor->update(0);
+        speed = SPEED/2;
+
+        while(speed > 30)
+        {
+            while(true)
+            {
+                Lmotor->update(-speed);
+                Rmotor->update(speed);
+
+                if(Rmotor->pulse_cnt() > half_val)
+                {
+                    speed -= a;
+                    Lmotor->reset_cnt();
+                    Rmotor->reset_cnt();
+                    break;
+                }
+            }
+        }
+
 
     }
     else if(direction == 'R') //migi ni magaru
     {
-        Lmotor->update(SPEED/2);
-        Rmotor->update(-SPEED/2);
+        speed = 0;
+        a = (SPEED - 30)/20;
+        x = TURN90/20;
+        half_val = TURN90/20;
 
-        while(true)
+        speed = 30;
+
+        while(speed < SPEED/2-a)
         {
-            if(Lmotor->pulse_cnt() >= TURN90) break;
+            while(true){
+                Lmotor->update(speed);
+                Rmotor->update(-speed);
+
+                if(Lmotor->pulse_cnt() > half_val){
+                    speed += a;
+                    Lmotor->reset_cnt();
+                    Rmotor->reset_cnt();
+                    break;
+                }
+            }
+
         }
-        Lmotor->update(0);
-        Rmotor->update(0);
+        speed = SPEED/2;
+
+        while(speed > 30)
+        {
+            while(true)
+            {
+                Lmotor->update(speed);
+                Rmotor->update(-speed);
+
+                if(Lmotor->pulse_cnt() > half_val)
+                {
+                    speed -= a;
+                    Lmotor->reset_cnt();
+                    Rmotor->reset_cnt();
+                    break;
+                }
+            }
+        }
     }
     else if(direction == 'T') //180do magaru
     {
-        Lmotor->update(SPEED/2);
-        Rmotor->update(-SPEED/2);
+        speed = 0;
+        a = (SPEED - 30)/20;
+        x = TURN90/20;
+        half_val = TURN90/20;
 
-        while(true)
+        speed = 30;
+
+        while(speed < SPEED/2-a)
         {
-            if(Lmotor->pulse_cnt() >= TURN90*2) break;
+            while(true){
+                Lmotor->update(speed);
+                Rmotor->update(-speed);
+
+                if(Lmotor->pulse_cnt() > half_val){
+                    speed += a;
+                    Lmotor->reset_cnt();
+                    Rmotor->reset_cnt();
+                    break;
+                }
+            }
+
         }
+        speed = SPEED/2-10;
+
+        while(speed > 30)
+        {
+            while(true)
+            {
+                Lmotor->update(speed);
+                Rmotor->update(-speed);
+
+                if(Lmotor->pulse_cnt() > half_val)
+                {
+                    speed -= a;
+                    Lmotor->reset_cnt();
+                    Rmotor->reset_cnt();
+                    break;
+                }
+            }
+        }
+
+        Lmotor->update(-50);
+        Rmotor->update(-50);
+        wait(2);
         Lmotor->update(0);
         Rmotor->update(0);
+        detailedBlock(50);
+        Lmotor->reset_cnt();
+        Rmotor->reset_cnt();
 
-    }
-    else{}
+        speed = 0;
+        a = (SPEED - 30)/20;
+        x = TURN90/20;
+        half_val = TURN90/20;
+
+        speed = 30;
+
+        while(speed < SPEED/2-a)
+        {
+            while(true){
+                Lmotor->update(speed);
+                Rmotor->update(-speed);
+
+                if(Lmotor->pulse_cnt() > half_val){
+                    speed += a;
+                    Lmotor->reset_cnt();
+                    Rmotor->reset_cnt();
+                    break;
+                }
+            }
+
+        }
+        speed = SPEED/2-10;
+
+        while(speed > 30)
+        {
+            while(true)
+            {
+                Lmotor->update(speed);
+                Rmotor->update(-speed);
+
+                if(Lmotor->pulse_cnt() > half_val)
+                {
+                    speed -= a;
+                    Lmotor->reset_cnt();
+                    Rmotor->reset_cnt();
+                    break;
+                }
+            }
+        }
+        Lmotor->update(-50);
+        Rmotor->update(-50);
+        wait(2);
+        Lmotor->update(0);
+        Rmotor->update(0);
+        Lmotor->reset_cnt();
+        Rmotor->reset_cnt();
+
+    }else{}
 }
 
 void Machine::daikei(int interval, char direction) //daikei de susumu
@@ -142,32 +307,30 @@ void Machine::daikei(int interval, char direction) //daikei de susumu
 
 void Machine::pCtrl() //p seigyo
 {
-    int cf = Fsen->get_val();
-    int ls = Lsen->get_val();
-    int rs = Rsen->get_val();
+    int s_sensor_sum = 180;
+    int Lspeed, Rspeed, Ltemp, Rtemp;
+    int L_sensor = Lsen->get_val();
+    int R_sensor = Rsen->get_val();
 
-    const int sensorSum = ls + rs;
 
-    if(sensorSum > RYOU_KABE)
-    {
-        if(ls > KATA_KABE && rs > KATA_KABE)
-        {
-            ls = rs = 0;
-        }
-        else if(ls > KATA_KABE)
-        {
-            ls = RYOU_KABE - rs;
-        }
-        else if(rs > KATA_KABE)
-        {
-            rs = RYOU_KABE - ls;
-        }
+    if(R_sensor > 150 && L_sensor > 150){
+        Rtemp = s_sensor_sum/2;
+        Ltemp = s_sensor_sum/2;
+    }else if(R_sensor > 150){
+		   	Ltemp = L_sensor;
+		   	Rtemp = 180 - Ltemp;
+		}else if(L_sensor > 150){
+		   	Rtemp = R_sensor;
+		   	Ltemp = 180 - Rtemp;
+	  }else{
+   			Rtemp = R_sensor;
+	   		Ltemp = L_sensor;
     }
 
-    const int sensorDiff = ls - rs;
-    Lmotor->update(500 - (sensorDiff * KP));
-    Rmotor->update(500 + (sensorDiff * KP));
-    wait(0.005);
+   	Lmotor->update(SPEED + KP * (Rtemp - Ltemp));
+   	Rmotor->update(SPEED + KP * (Ltemp - Rtemp));
+   	wait_ms(3);
+
 }
 
 bool Machine::isOpenedWallF() //mae kabe check
